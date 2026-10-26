@@ -4,392 +4,875 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SparkAI — 少写 90% 的废话，多拿 10 倍的线索</title>
-  <meta name="description" content="SparkAI 帮营销团队 10 分钟产出过去要 4 小时的内容。14 天免费，不满意一键退款，不问原因。" />
+  <meta name="description" content="SparkAI 帮营销团队 10 分钟产出过去要 4 小时的内容。14 天免费，30 天退款保证，不问原因。" />
   <style>
+    /* ============ TOKENS ============ */
     :root {
-      --black: #0a0a0a;
-      --card: #141414;
-      --white: #fafafa;
-      --red: #e63946;
-      --red-hover: #c92d3a;
+      --bg: #0a0a0a;
+      --surface: #121212;
+      --surface-2: #1a1a1a;
+      --line: #262626;
+      --line-strong: #383838;
+
+      --ink: #f5f5f5;
+      --ink-dim: #c4c4c4;
+      --muted: #8a8a8a;
+
+      --red: #ff3b30;
+      --red-hover: #e0281d;
       --yellow: #ffd60a;
-      --gray: #8a8a8a;
-      --border: #2a2a2a;
+      --green: #30d158;
+
+      --radius: 6px;
+      --radius-lg: 10px;
+
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+      --space-5: 48px;
+      --space-6: 64px;
+      --section-y: clamp(80px, 9vw, 140px);
+      --container: 1180px;
+
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+              "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+
+    /* ============ RESET ============ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: var(--black);
-      color: var(--white);
-      line-height: 1.5;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
     a { color: inherit; text-decoration: none; }
-    .container { width: min(1180px, 92%); margin: 0 auto; }
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    img, svg { display: block; max-width: 100%; }
+    ::selection { background: var(--yellow); color: #000; }
+
+    .container { width: min(var(--container), 92%); margin-inline: auto; }
+    .num { font-variant-numeric: tabular-nums; }
+
+    /* ============ TYPO ============ */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 2px;
+      background: var(--red);
+    }
+    h1, h2, h3 {
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.02;
+      text-wrap: balance;
+    }
+    h1 { font-size: clamp(44px, 8vw, 104px); }
+    h2 { font-size: clamp(32px, 5.2vw, 64px); }
+    h3 { font-size: clamp(18px, 2vw, 22px); line-height: 1.25; }
+
+    .lede {
+      font-size: clamp(16px, 1.6vw, 19px);
+      color: var(--ink-dim);
+      max-width: 720px;
+      line-height: 1.65;
+    }
+    .lede strong { color: var(--ink); }
+
     mark {
-      background: var(--yellow);
-      color: var(--black);
-      padding: 0 .12em;
+      background: linear-gradient(transparent 8%, var(--yellow) 8%, var(--yellow) 92%, transparent 92%);
+      color: #000;
+      padding: 0 0.08em;
       font-weight: 900;
     }
 
-    /* NAV */
-    header {
-      border-bottom: 1px solid var(--border);
-      position: sticky; top: 0; z-index: 20;
-      background: rgba(10,10,10,.92);
-      backdrop-filter: blur(10px);
+    /* ============ REVEAL ============ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+                  transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
-    .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .logo { font-weight: 900; font-size: 18px; letter-spacing: -.02em; }
-    .logo span { color: var(--red); }
-    .nav-cta {
-      background: var(--red); color: #fff; font-weight: 800;
-      padding: 10px 16px; border-radius: 4px; font-size: 14px;
-      transition: background .15s;
+    .reveal.is-in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
     }
-    .nav-cta:hover { background: var(--red-hover); }
 
-    /* HERO */
-    .hero { padding: 90px 0 70px; border-bottom: 1px solid var(--border); }
-    .kicker {
-      display: inline-block; font-size: 13px; font-weight: 800;
-      letter-spacing: .12em; text-transform: uppercase;
-      color: var(--red); border: 1px solid var(--red);
-      padding: 6px 10px; border-radius: 4px; margin-bottom: 28px;
-    }
-    h1 {
-      font-size: clamp(46px, 8.5vw, 108px);
-      font-weight: 900;
-      letter-spacing: -.045em;
-      line-height: .95;
-      margin-bottom: 28px;
-    }
-    .hero-sub {
-      font-size: clamp(18px, 2vw, 22px);
-      color: #cfcfcf;
-      max-width: 780px;
-      margin-bottom: 36px;
-    }
-    .hero-sub strong { color: var(--white); }
-    .actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+    /* ============ BUTTONS ============ */
     .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 18px 30px; border-radius: 4px;
-      font-weight: 900; font-size: 17px; letter-spacing: -.01em;
-      border: none; cursor: pointer; transition: .15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px 28px;
+      border-radius: var(--radius);
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: -0.005em;
+      transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease,
+                  border-color 0.15s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
     }
-    .btn-primary { background: var(--red); color: #fff; }
-    .btn-primary:hover { background: var(--red-hover); transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.5);
+    }
+    .btn-primary:hover {
+      background: var(--red-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px -8px rgba(255, 59, 48, 0.55);
+    }
     .btn-ghost {
-      background: transparent; color: var(--white);
-      border: 2px solid var(--white);
+      border: 2px solid var(--line-strong);
+      color: var(--ink);
     }
-    .btn-ghost:hover { background: var(--white); color: var(--black); }
-    .microcopy { margin-top: 16px; color: var(--gray); font-size: 14px; font-weight: 600; }
+    .btn-ghost:hover {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #000;
+      transform: translateY(-2px);
+    }
+    .btn .arrow { transition: transform 0.15s ease; }
+    .btn:hover .arrow { transform: translateX(4px); }
 
-    /* STATS BAR */
+    .microcopy {
+      margin-top: var(--space-2);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+
+    /* ============ ANNOUNCEMENT ============ */
+    .announce {
+      background: var(--yellow);
+      color: #000;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-align: center;
+      padding: 10px 16px;
+    }
+    .announce span { opacity: 0.7; margin-inline: 8px; }
+
+    /* ============ HEADER ============ */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 10, 10, 0.86);
+      backdrop-filter: saturate(140%) blur(14px);
+      -webkit-backdrop-filter: saturate(140%) blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: var(--space-3);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+    }
+    .logo-mark {
+      width: 30px; height: 30px;
+      border-radius: 6px;
+      background: var(--red);
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .nav-links {
+      display: flex;
+      gap: var(--space-4);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-dim);
+    }
+    .nav-links a { transition: color 0.15s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      background: var(--red);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 11px 18px;
+      border-radius: var(--radius);
+      transition: background 0.15s, transform 0.15s;
+    }
+    .nav-cta:hover { background: var(--red-hover); transform: translateY(-1px); }
+
+    /* ============ HERO ============ */
+    .hero {
+      padding: clamp(64px, 8vw, 110px) 0 var(--section-y);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -20% -10% auto auto;
+      width: 60vw; height: 60vw;
+      max-width: 820px; max-height: 820px;
+      background: radial-gradient(circle, rgba(255, 59, 48, 0.10), transparent 62%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero > .container { position: relative; z-index: 1; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.55fr);
+      gap: clamp(32px, 5vw, 64px);
+      align-items: end;
+    }
+    .hero h1 { margin: var(--space-3) 0 var(--space-3); }
+    .hero-sub {
+      font-size: clamp(17px, 1.9vw, 21px);
+      color: var(--ink-dim);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+    .hero-sub strong { color: var(--ink); font-weight: 800; }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: var(--space-4);
+    }
+
+    /* Hero result wall */
+    .result-wall {
+      display: grid;
+      gap: 12px;
+    }
+    .result-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface-2), var(--surface));
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .result-card:hover {
+      border-color: var(--line-strong);
+      transform: translateY(-2px);
+    }
+    .result-num {
+      font-size: clamp(28px, 3.2vw, 40px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--yellow);
+      font-variant-numeric: tabular-nums;
+    }
+    .result-num small {
+      font-size: 0.42em;
+      color: var(--ink-dim);
+      font-weight: 700;
+      letter-spacing: 0;
+      margin-left: 6px;
+    }
+    .result-label {
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ============ STATS STRIP ============ */
     .stats {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      border-bottom: 1px solid var(--border);
+      border-block: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
     }
     .stat {
-      padding: 36px 24px;
-      border-right: 1px solid var(--border);
+      padding: clamp(28px, 4vw, 44px) var(--space-4);
       text-align: center;
+      border-right: 1px solid var(--line);
     }
     .stat:last-child { border-right: none; }
     .stat-num {
-      font-size: clamp(34px, 4.5vw, 56px);
-      font-weight: 900; letter-spacing: -.04em;
-      color: var(--yellow);
+      font-size: clamp(30px, 4vw, 52px);
+      font-weight: 900;
+      letter-spacing: -0.035em;
       line-height: 1;
+      font-variant-numeric: tabular-nums;
     }
-    .stat-label { margin-top: 10px; color: var(--gray); font-size: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+    .stat-label {
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
 
-    /* SECTIONS */
-    section { padding: 90px 0; border-bottom: 1px solid var(--border); }
-    .section-label {
-      font-size: 13px; font-weight: 800; letter-spacing: .14em;
-      text-transform: uppercase; color: var(--red); margin-bottom: 20px;
+    /* ============ SECTION BASE ============ */
+    section.block {
+      padding-block: var(--section-y);
+      border-bottom: 1px solid var(--line);
     }
-    h2 {
-      font-size: clamp(34px, 5.5vw, 68px);
-      font-weight: 900; letter-spacing: -.035em; line-height: 1;
-      margin-bottom: 24px;
-    }
-    .lede { font-size: clamp(17px, 1.8vw, 21px); color: #c8c8c8; max-width: 820px; margin-bottom: 50px; }
+    .section-head { margin-bottom: clamp(40px, 5vw, 64px); }
+    .section-head h2 { margin: var(--space-2) 0 var(--space-3); }
+    .section-head .lede { max-width: 680px; }
 
-    /* PROBLEM LIST */
-    .problem-list { display: grid; gap: 18px; }
-    .problem {
-      display: flex; gap: 20px; align-items: flex-start;
-      padding: 24px 26px;
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--red);
-      background: var(--card);
-      border-radius: 4px;
+    /* ============ PROBLEM ============ */
+    .problem-list {
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--line);
     }
-    .problem-x {
-      flex-shrink: 0;
-      width: 36px; height: 36px;
-      display: grid; place-items: center;
-      background: var(--red); color: #fff;
-      font-weight: 900; font-size: 20px; border-radius: 4px;
+    .problem-item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: var(--space-3);
+      align-items: baseline;
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.2s, padding-left 0.2s;
     }
-    .problem p { font-size: 18px; font-weight: 600; }
-    .problem p strong { color: var(--yellow); }
+    .problem-item:hover {
+      background: linear-gradient(90deg, rgba(255, 59, 48, 0.06), transparent 60%);
+      padding-left: 12px;
+    }
+    .problem-index {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--red);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.06em;
+    }
+    .problem-text {
+      font-size: clamp(18px, 2.2vw, 26px);
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -0.015em;
+      color: var(--ink-dim);
+    }
+    .problem-text strong { color: var(--ink); font-weight: 900; }
+    .problem-text em {
+      font-style: normal;
+      color: var(--yellow);
+      font-weight: 900;
+    }
 
-    /* OFFER */
-    .offer-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 40px; align-items: start; }
-    .offer-list { display: grid; gap: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-    .offer-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 22px 26px; gap: 20px;
-      border-bottom: 1px solid var(--border);
-      background: var(--card);
+    /* ============ OFFER ============ */
+    .offer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+      gap: clamp(24px, 3vw, 40px);
+      align-items: start;
     }
-    .offer-item:last-child { border-bottom: none; }
-    .offer-item h3 { font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
-    .offer-item p { font-size: 14px; color: var(--gray); margin-top: 4px; }
-    .offer-value { color: var(--yellow); font-weight: 900; white-space: nowrap; font-size: 16px; }
+    .receipt {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .receipt-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: var(--surface-2);
+      border-bottom: 1px dashed var(--line-strong);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .receipt-head .badge {
+      color: var(--yellow);
+      letter-spacing: 0.1em;
+    }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .receipt-row:last-of-type { border-bottom: none; }
+    .receipt-row h3 { font-size: 17px; letter-spacing: -0.01em; }
+    .receipt-row p {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+    .receipt-value {
+      color: var(--yellow);
+      font-weight: 900;
+      font-size: 15px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .receipt-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      background: var(--surface-2);
+      border-top: 1px dashed var(--line-strong);
+      font-weight: 900;
+      font-size: 16px;
+    }
+    .receipt-total .strike {
+      color: var(--muted);
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      font-variant-numeric: tabular-nums;
+    }
 
     .price-card {
       border: 2px solid var(--yellow);
-      background: var(--card);
-      padding: 34px 30px;
-      border-radius: 6px;
-      position: sticky; top: 90px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, var(--surface-2), var(--surface));
+      padding: clamp(26px, 3vw, 36px);
+      position: sticky;
+      top: 92px;
     }
-    .price-total-label { color: var(--gray); font-size: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
-    .price-total {
-      font-size: 40px; font-weight: 900; letter-spacing: -.03em;
-      text-decoration: line-through; color: #666; margin: 6px 0 16px;
+    .price-label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
-    .price-now-label { color: var(--gray); font-size: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
-    .price-now {
-      font-size: clamp(54px, 6vw, 76px);
-      font-weight: 900; letter-spacing: -.04em; color: var(--yellow); line-height: 1;
+    .price-big {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin: 10px 0 6px;
+      line-height: 1;
     }
-    .price-now small { font-size: 20px; color: var(--white); font-weight: 700; }
-    .price-card .btn { width: 100%; margin-top: 22px; }
-    .price-note { margin-top: 14px; color: var(--gray); font-size: 13px; font-weight: 600; }
+    .price-big .amount {
+      font-size: clamp(56px, 6vw, 76px);
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      color: var(--yellow);
+      font-variant-numeric: tabular-nums;
+    }
+    .price-big .suffix {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .price-sub {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: var(--space-3);
+    }
+    .price-card .btn { width: 100%; }
+    .price-foot {
+      margin-top: var(--space-2);
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.5;
+      text-align: center;
+    }
 
-    /* GUARANTEE */
+    /* ============ GUARANTEE ============ */
     .guarantee {
-      background: var(--yellow); color: var(--black);
-      border-radius: 6px; padding: 50px 44px;
-      display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center;
+      background: var(--yellow);
+      color: #000;
+      border-radius: var(--radius-lg);
+      padding: clamp(36px, 5vw, 56px);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: center;
     }
     .guarantee-badge {
-      width: 110px; height: 110px; border-radius: 50%;
-      border: 4px solid var(--black);
-      display: grid; place-items: center;
-      font-weight: 900; font-size: 30px; line-height: 1; text-align: center;
+      width: clamp(96px, 12vw, 132px);
+      height: clamp(96px, 12vw, 132px);
+      border-radius: 50%;
+      border: 4px solid #000;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
       flex-shrink: 0;
     }
-    .guarantee h2 { font-size: clamp(30px, 4vw, 48px); margin-bottom: 12px; }
-    .guarantee p { font-size: 18px; font-weight: 600; line-height: 1.55; }
+    .guarantee-badge .b-num { font-size: clamp(32px, 4vw, 44px); }
+    .guarantee-badge .b-txt {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      margin-top: 4px;
+    }
+    .guarantee h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      margin-bottom: var(--space-2);
+      color: #000;
+    }
+    .guarantee p {
+      font-size: clamp(15px, 1.6vw, 17px);
+      font-weight: 600;
+      line-height: 1.6;
+      max-width: 720px;
+    }
 
-    /* COMPARE TABLE */
+    /* ============ COMPARE ============ */
     .compare {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
-      border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
     }
-    .compare-col { padding: 0; }
-    .compare-col.them { background: #0f0f0f; border-right: 1px solid var(--border); }
+    .compare-col { display: flex; flex-direction: column; }
+    .compare-col.them { background: #0d0d0d; border-right: 1px solid var(--line); }
+    .compare-col.us { background: var(--surface); }
     .compare-head {
-      padding: 22px 26px; font-weight: 900; font-size: 14px;
-      letter-spacing: .1em; text-transform: uppercase;
-      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--line);
     }
-    .compare-col.them .compare-head { color: var(--gray); }
-    .compare-col.us .compare-head { color: var(--black); background: var(--yellow); }
-    .compare-item {
-      padding: 20px 26px; border-bottom: 1px solid var(--border);
-      display: flex; gap: 14px; align-items: flex-start;
-      font-size: 16px; font-weight: 600;
+    .compare-col.them .compare-head { color: var(--muted); }
+    .compare-col.us .compare-head { background: var(--yellow); color: #000; }
+    .compare-row {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--line);
+      font-size: 15.5px;
+      font-weight: 600;
+      line-height: 1.45;
     }
-    .compare-item:last-child { border-bottom: none; }
-    .compare-icon { font-weight: 900; flex-shrink: 0; }
-    .compare-col.them .compare-icon { color: var(--red); }
-    .compare-col.us .compare-icon { color: var(--yellow); }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-icon {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 900;
+      margin-top: 1px;
+    }
+    .compare-col.them .compare-icon { background: rgba(255, 59, 48, 0.15); color: var(--red); }
+    .compare-col.us .compare-icon { background: rgba(48, 209, 88, 0.15); color: var(--green); }
 
-    /* FAQ */
-    .faq { display: grid; gap: 0; border-top: 1px solid var(--border); }
+    /* ============ FAQ ============ */
+    .faq { border-top: 1px solid var(--line); }
     .faq-item {
-      border-bottom: 1px solid var(--border);
-      padding: 26px 0;
-      display: grid; grid-template-columns: 1fr 1.3fr; gap: 30px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(16px, 4vw, 56px);
+      padding: clamp(24px, 3vw, 32px) 0;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.2s;
     }
-    .faq-q { font-size: 20px; font-weight: 900; letter-spacing: -.01em; }
-    .faq-a { color: #c8c8c8; font-size: 16px; }
-    .faq-a strong { color: var(--yellow); }
+    .faq-item:hover { background: rgba(255, 255, 255, 0.015); }
+    .faq-q {
+      font-size: clamp(17px, 1.9vw, 20px);
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+      display: flex;
+      gap: 12px;
+    }
+    .faq-q::before {
+      content: "Q";
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      padding-top: 3px;
+    }
+    .faq-a { color: var(--ink-dim); font-size: 15.5px; line-height: 1.65; }
+    .faq-a strong { color: var(--yellow); font-weight: 800; }
 
-    /* FINAL CTA */
-    .final-cta { text-align: left; padding: 100px 0; }
-    .final-cta h2 {
-      font-size: clamp(40px, 7vw, 88px);
-      margin-bottom: 24px;
+    /* ============ FINAL CTA ============ */
+    .final { padding-block: var(--section-y); }
+    .final h2 {
+      font-size: clamp(38px, 6.5vw, 84px);
+      margin: var(--space-2) 0 var(--space-3);
+    }
+    .final .lede { margin-bottom: var(--space-4); }
+
+    /* ============ FOOTER ============ */
+    .site-footer {
+      border-top: 1px solid var(--line);
+      padding-block: var(--space-4);
+      color: var(--muted);
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-2);
     }
 
-    footer {
-      padding: 34px 0;
-      color: var(--gray); font-size: 14px; font-weight: 600;
-      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px;
-      border-top: 1px solid var(--border);
-    }
-
-    @media (max-width: 900px) {
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr; align-items: start; }
+      .result-wall {
+        grid-template-columns: repeat(3, 1fr);
+        margin-top: var(--space-3);
+      }
       .offer-grid { grid-template-columns: 1fr; }
       .price-card { position: static; }
       .compare { grid-template-columns: 1fr; }
-      .compare-col.them { border-right: none; border-bottom: 1px solid var(--border); }
-      .faq-item { grid-template-columns: 1fr; gap: 10px; }
-      .stats { grid-template-columns: 1fr; }
-      .stat { border-right: none; border-bottom: 1px solid var(--border); }
-      .stat:last-child { border-bottom: none; }
-      .guarantee { grid-template-columns: 1fr; text-align: center; justify-items: center; padding: 40px 28px; }
+      .compare-col.them { border-right: none; border-bottom: 1px solid var(--line); }
+      .faq-item { grid-template-columns: 1fr; gap: 8px; }
+      .nav-links { display: none; }
     }
-    @media (max-width: 560px) {
-      .actions .btn { width: 100%; }
-      .hero { padding-top: 60px; }
+    @media (max-width: 720px) {
+      .result-wall { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .stat { border-right: none; border-bottom: 1px solid var(--line); }
+      .stat:last-child { border-bottom: none; }
+      .guarantee { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .guarantee p { margin-inline: auto; }
+      .problem-item { grid-template-columns: 48px 1fr; gap: 12px; }
+      .hero-actions .btn { flex: 1 1 100%; }
+    }
+    @media (max-width: 480px) {
+      .receipt-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .receipt-value { font-size: 14px; }
     }
   </style>
 </head>
 <body>
-  <header>
+
+  <div class="announce">
+    限时 · 14 天免费 <span>·</span> 不需要信用卡 <span>·</span> 30 天退款保证
+  </div>
+
+  <header class="site-header">
     <div class="container nav">
-      <div class="logo">SPARK<span>AI</span></div>
+      <a href="#top" class="logo">
+        <span class="logo-mark">S</span>
+        <span>SparkAI</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="#problem">问题</a>
+        <a href="#offer">报价</a>
+        <a href="#compare">对比</a>
+        <a href="#faq">FAQ</a>
+      </nav>
       <a href="#offer" class="nav-cta">免费试 14 天</a>
     </div>
   </header>
 
-  <main>
+  <main id="top">
+
     <!-- HERO -->
     <section class="hero">
       <div class="container">
-        <div class="kicker">给营销团队的 AI 内容系统 · 测试落地页</div>
-        <h1>少写 90% 的废话。<br>多拿 <mark>10 倍</mark> 的线索。</h1>
-        <p class="hero-sub">
-          SparkAI 让你的团队在 <strong>10 分钟</strong>内产出过去要 <strong>4 小时</strong>才能憋出来的营销内容。
-          没有花哨的 AI 术语，没有按月锁定的合同，只有你能直接复制、粘贴、发布的东西。
-        </p>
-        <div class="actions">
-          <button class="btn btn-primary" onclick="demoAction('免费试用')">免费试 14 天 →</button>
-          <a href="#problem" class="btn btn-ghost">先看问题在哪</a>
+        <div class="hero-grid">
+          <div class="reveal">
+            <span class="eyebrow">给营销团队的 AI 内容系统</span>
+            <h1>少写 90% 的废话。<br>多拿 <mark>10 倍</mark> 的线索。</h1>
+            <p class="hero-sub">
+              SparkAI 让你的团队在 <strong>10 分钟</strong>内产出过去要 <strong>4 小时</strong>才能憋出来的营销内容。
+              没有花哨的 AI 术语，没有按月锁定的合同，只有你能直接复制、粘贴、发布的东西。
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" data-demo="免费试用">
+                免费试 14 天 <span class="arrow">→</span>
+              </button>
+              <a href="#problem" class="btn btn-ghost">先看问题在哪</a>
+            </div>
+            <p class="microcopy">不需要信用卡 · 不满意一键退款 · 不问原因</p>
+          </div>
+
+          <aside class="result-wall reveal" aria-label="客户结果数据">
+            <div class="result-card">
+              <div class="result-num">4h → 10min<small>内容产出</small></div>
+              <div class="result-label">从选题到可发布文案的平均耗时</div>
+            </div>
+            <div class="result-card">
+              <div class="result-num">+38%<small>转化</small></div>
+              <div class="result-label">使用 30 天后落地页转化率变化</div>
+            </div>
+            <div class="result-card">
+              <div class="result-num">11h<small>/周</small></div>
+              <div class="result-label">每个营销团队平均每周节省的时间</div>
+            </div>
+          </aside>
         </div>
-        <p class="microcopy">不需要信用卡 · 不满意一键退款 · 不问原因</p>
       </div>
     </section>
 
     <!-- STATS -->
     <div class="stats">
-      <div class="stat">
-        <div class="stat-num">2,400,000+</div>
-        <div class="stat-label">条营销文案已生成</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">3,200+</div>
-        <div class="stat-label">团队正在使用</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">11 小时</div>
-        <div class="stat-label">平均每周节省</div>
+      <div class="container stats-grid">
+        <div class="stat reveal">
+          <div class="stat-num">2,400,000+</div>
+          <div class="stat-label">条营销文案已生成</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-num">3,200+</div>
+          <div class="stat-label">团队正在使用</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-num">11 小时</div>
+          <div class="stat-label">平均每周节省</div>
+        </div>
       </div>
     </div>
 
     <!-- PROBLEM -->
-    <section id="problem">
+    <section class="block" id="problem">
       <div class="container">
-        <div class="section-label">问题</div>
-        <h2>为什么大多数营销内容<br>根本没人看？</h2>
-        <p class="lede">不是你的产品不行。是你把时间花在了没人关心的地方。</p>
+        <div class="section-head reveal">
+          <span class="eyebrow">问题</span>
+          <h2>为什么大多数营销内容<br>根本没人看？</h2>
+          <p class="lede">不是你的产品不行。是你把时间花在了没人关心的地方。</p>
+        </div>
+
         <div class="problem-list">
-          <div class="problem">
-            <div class="problem-x">✕</div>
-            <p>你在写<strong>你觉得酷</strong>的东西，不是客户<strong>想买</strong>的东西。</p>
+          <div class="problem-item reveal">
+            <div class="problem-index">01</div>
+            <p class="problem-text">你在写<strong>你觉得酷</strong>的东西，不是客户<em>想买</em>的东西。</p>
           </div>
-          <div class="problem">
-            <div class="problem-x">✕</div>
-            <p>你的团队花了 <strong>3 天</strong>，只憋出一条没人点的推文。</p>
+          <div class="problem-item reveal">
+            <div class="problem-index">02</div>
+            <p class="problem-text">你的团队花了 <strong>3 天</strong>，只憋出一条没人点的推文。</p>
           </div>
-          <div class="problem">
-            <div class="problem-x">✕</div>
-            <p>你付给代理商 <strong>$5,000/月</strong>，换回来一堆没人读的报告和一句"品牌曝光"。</p>
+          <div class="problem-item reveal">
+            <div class="problem-index">03</div>
+            <p class="problem-text">你付给代理商 <strong>$5,000/月</strong>，换回来一堆没人读的报告和一句"品牌曝光"。</p>
           </div>
-          <div class="problem">
-            <div class="problem-x">✕</div>
-            <p>你买了 7 个 AI 工具，每个都在教你<strong>怎么写 prompt</strong>，而不是帮你把活干完。</p>
+          <div class="problem-item reveal">
+            <div class="problem-index">04</div>
+            <p class="problem-text">你买了 7 个 AI 工具，每个都在教你<strong>怎么写 prompt</strong>，而不是帮你把活干完。</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- OFFER -->
-    <section id="offer">
+    <section class="block" id="offer">
       <div class="container">
-        <div class="section-label">这就是你拿到的东西</div>
-        <h2>一个工具。一个价格。<br>全部功能。</h2>
-        <p class="lede">我们不做"基础版/专业版/企业版"那种让你加钱解锁的套路。你付一次，全部打开。</p>
+        <div class="section-head reveal">
+          <span class="eyebrow">这就是你拿到的东西</span>
+          <h2>一个工具。一个价格。<br>全部功能。</h2>
+          <p class="lede">我们不做"基础版 / 专业版 / 企业版"那种让你加钱解锁的套路。你付一次，全部打开。</p>
+        </div>
 
         <div class="offer-grid">
-          <div class="offer-list">
-            <div class="offer-item">
+          <div class="receipt reveal">
+            <div class="receipt-head">
+              <span>你得到什么</span>
+              <span class="badge">单独购买价值</span>
+            </div>
+
+            <div class="receipt-row">
               <div>
                 <h3>AI 文案引擎</h3>
                 <p>社交媒体、广告、邮件、落地页，一键生成，直接发布。</p>
               </div>
-              <div class="offer-value">价值 $2,400/年</div>
+              <div class="receipt-value">$2,400 / 年</div>
             </div>
-            <div class="offer-item">
+
+            <div class="receipt-row">
               <div>
                 <h3>20+ 营销模板</h3>
                 <p>经过验证的结构，填三个空，出成品。不用从零开始。</p>
               </div>
-              <div class="offer-value">价值 $1,200/年</div>
+              <div class="receipt-value">$1,200 / 年</div>
             </div>
-            <div class="offer-item">
+
+            <div class="receipt-row">
               <div>
                 <h3>受众洞察报告</h3>
                 <p>告诉你客户真正想听什么，而不是你以为他们想听什么。</p>
               </div>
-              <div class="offer-value">价值 $3,600/年</div>
+              <div class="receipt-value">$3,600 / 年</div>
             </div>
-            <div class="offer-item">
+
+            <div class="receipt-row">
               <div>
                 <h3>多渠道内容日历</h3>
                 <p>统一排期，不再靠群聊里"你发了吗"来推进工作。</p>
               </div>
-              <div class="offer-value">价值 $960/年</div>
+              <div class="receipt-value">$960 / 年</div>
             </div>
-            <div class="offer-item">
+
+            <div class="receipt-row">
               <div>
                 <h3>无限导出 &amp; 数据归你</h3>
                 <p>内容随时导出。我们不拿你的数据训练模型。</p>
               </div>
-              <div class="offer-value">无价</div>
+              <div class="receipt-value">无价</div>
+            </div>
+
+            <div class="receipt-total">
+              <span>如果分开买，总共</span>
+              <span class="strike">$8,160 / 年</span>
             </div>
           </div>
 
-          <div class="price-card">
-            <div class="price-total-label">如果分开买，总共</div>
-            <div class="price-total">$8,160 / 年</div>
-            <div class="price-now-label">你现在付</div>
-            <div class="price-now">$0<small> 起</small></div>
-            <button class="btn btn-primary" onclick="demoAction('立即开始')">免费试 14 天 →</button>
-            <p class="price-note">14 天后 $49/月，随时取消。不满意，发一封邮件，全额退款。</p>
+          <div class="price-card reveal">
+            <div class="price-label">你现在付</div>
+            <div class="price-big">
+              <span class="amount">$0</span>
+              <span class="suffix">起</span>
+            </div>
+            <div class="price-sub">14 天后 $49 / 月 · 随时取消</div>
+            <button class="btn btn-primary" data-demo="立即开始">
+              免费试 14 天 <span class="arrow">→</span>
+            </button>
+            <p class="price-foot">不满意，发一封邮件，全额退款。<br>不问原因。</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- GUARANTEE -->
-    <section>
+    <section class="block">
       <div class="container">
-        <div class="guarantee">
-          <div class="guarantee-badge">30<br>天</div>
+        <div class="guarantee reveal">
+          <div class="guarantee-badge">
+            <div>
+              <div class="b-num">30</div>
+              <div class="b-txt">DAYS</div>
+            </div>
+          </div>
           <div>
             <h2>不满意，全额退。不问原因。</h2>
             <p>我们不靠合同留人。如果 SparkAI 不能帮你省时间、多拿线索，你就不该为它付钱。发一封邮件，钱退回去，就这么简单。</p>
@@ -399,55 +882,61 @@
     </section>
 
     <!-- COMPARE -->
-    <section>
+    <section class="block" id="compare">
       <div class="container">
-        <div class="section-label">对比</div>
-        <h2>别人 vs. 我们</h2>
-        <p class="lede">你可以继续用原来的方式。也可以花 10 分钟试试这个。</p>
-        <div class="compare">
+        <div class="section-head reveal">
+          <span class="eyebrow">对比</span>
+          <h2>别人 vs. 我们</h2>
+          <p class="lede">你可以继续用原来的方式。也可以花 10 分钟试试这个。</p>
+        </div>
+
+        <div class="compare reveal">
           <div class="compare-col them">
             <div class="compare-head">大多数 AI 工具 / 代理商</div>
-            <div class="compare-item"><span class="compare-icon">✕</span><span>按人头收费，团队越大越贵</span></div>
-            <div class="compare-item"><span class="compare-icon">✕</span><span>锁定 12 个月合同，提前解约罚钱</span></div>
-            <div class="compare-item"><span class="compare-icon">✕</span><span>写出来的东西还要你自己大改</span></div>
-            <div class="compare-item"><span class="compare-icon">✕</span><span>用你的数据训练他们的模型</span></div>
-            <div class="compare-item"><span class="compare-icon">✕</span><span>退款要填 5 张表，等 3 周</span></div>
+            <div class="compare-row"><span class="compare-icon">✕</span><span>按人头收费，团队越大越贵</span></div>
+            <div class="compare-row"><span class="compare-icon">✕</span><span>锁定 12 个月合同，提前解约罚钱</span></div>
+            <div class="compare-row"><span class="compare-icon">✕</span><span>写出来的东西还要你自己大改</span></div>
+            <div class="compare-row"><span class="compare-icon">✕</span><span>用你的数据训练他们的模型</span></div>
+            <div class="compare-row"><span class="compare-icon">✕</span><span>退款要填 5 张表，等 3 周</span></div>
           </div>
           <div class="compare-col us">
             <div class="compare-head">SparkAI</div>
-            <div class="compare-item"><span class="compare-icon">✓</span><span>一个价格，1 人或 50 人团队都一样</span></div>
-            <div class="compare-item"><span class="compare-icon">✓</span><span>月付，随时取消，没有违约金</span></div>
-            <div class="compare-item"><span class="compare-icon">✓</span><span>生成即用，改两个词就能发</span></div>
-            <div class="compare-item"><span class="compare-icon">✓</span><span>你的内容归你，不训练模型</span></div>
-            <div class="compare-item"><span class="compare-icon">✓</span><span>一封邮件，3 个工作日到账</span></div>
+            <div class="compare-row"><span class="compare-icon">✓</span><span>一个价格，1 人或 50 人团队都一样</span></div>
+            <div class="compare-row"><span class="compare-icon">✓</span><span>月付，随时取消，没有违约金</span></div>
+            <div class="compare-row"><span class="compare-icon">✓</span><span>生成即用，改两个词就能发</span></div>
+            <div class="compare-row"><span class="compare-icon">✓</span><span>你的内容归你，不训练模型</span></div>
+            <div class="compare-row"><span class="compare-icon">✓</span><span>一封邮件，3 个工作日到账</span></div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section>
+    <section class="block" id="faq">
       <div class="container">
-        <div class="section-label">常见问题</div>
-        <h2>你可能想问的。</h2>
+        <div class="section-head reveal">
+          <span class="eyebrow">常见问题</span>
+          <h2>你可能想问的。</h2>
+        </div>
+
         <div class="faq">
-          <div class="faq-item">
+          <div class="faq-item reveal">
             <div class="faq-q">它真的免费吗？</div>
             <div class="faq-a">14 天免费，全部功能打开。<strong>不需要信用卡。</strong>14 天后 $49/月，不满意随时取消，发邮件退款。</div>
           </div>
-          <div class="faq-item">
+          <div class="faq-item reveal">
             <div class="faq-q">我需要会写 prompt 吗？</div>
             <div class="faq-a">不需要。填三个空：你的产品、你的客户、你要发在哪个渠道。点生成。<strong>没有 prompt 教程要你看。</strong></div>
           </div>
-          <div class="faq-item">
+          <div class="faq-item reveal">
             <div class="faq-q">小团队用得起吗？</div>
             <div class="faq-a">1 个人用和 50 个人用，价格一样。<strong>我们不做按人头收费的游戏。</strong></div>
           </div>
-          <div class="faq-item">
+          <div class="faq-item reveal">
             <div class="faq-q">我的数据安全吗？</div>
             <div class="faq-a">你的内容归你。我们不用你的数据训练模型。随时导出，随时删除。</div>
           </div>
-          <div class="faq-item">
+          <div class="faq-item reveal">
             <div class="faq-q">它和 ChatGPT 有什么区别？</div>
             <div class="faq-a">ChatGPT 是通用助手，什么都能聊。SparkAI <strong>只干营销这一件事</strong>，而且干到能直接发布。你省掉的是"改 AI 写出来的东西"那 3 小时。</div>
           </div>
@@ -456,31 +945,67 @@
     </section>
 
     <!-- FINAL CTA -->
-    <section class="final-cta">
+    <section class="final">
       <div class="container">
-        <div class="section-label">最后一句</div>
-        <h2>你只有两种选择。</h2>
-        <p class="lede">继续用 4 小时憋一条没人看的文案。或者，花 10 分钟试试 SparkAI，14 天免费，不满意一键退款。</p>
-        <div class="actions">
-          <button class="btn btn-primary" onclick="demoAction('免费试用')">免费试 14 天 →</button>
-          <a href="#offer" class="btn btn-ghost">再看看你得到什么</a>
+        <div class="reveal">
+          <span class="eyebrow">最后一句</span>
+          <h2>你只有两种选择。</h2>
+          <p class="lede">
+            继续用 4 小时憋一条没人看的文案。或者，花 10 分钟试试 SparkAI，
+            <strong>14 天免费</strong>，不满意一键退款。
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" data-demo="免费试用">
+              免费试 14 天 <span class="arrow">→</span>
+            </button>
+            <a href="#offer" class="btn btn-ghost">再看看你得到什么</a>
+          </div>
+          <p class="microcopy">不需要信用卡 · 30 天退款保证 · 随时取消</p>
         </div>
-        <p class="microcopy">不需要信用卡 · 30 天退款保证 · 随时取消</p>
       </div>
     </section>
+
   </main>
 
-  <footer>
-    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+  <footer class="site-footer">
+    <div class="container footer-inner">
       <div>© 2026 SparkAI · 测试落地页 · Hormozi 风格</div>
       <div>GitHub Pages 托管 · 纯静态演示</div>
     </div>
   </footer>
 
   <script>
-    function demoAction(name) {
-      alert(name + "：这是演示按钮。\n\n真实上线时，把这里换成：\n- 注册/试用表单\n- Calendly 预约链接\n- 微信/WhatsApp 客服\n- 支付跳转");
-    }
+    // 演示按钮
+    document.querySelectorAll("[data-demo]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var name = el.getAttribute("data-demo");
+        alert(
+          name + "：这是演示按钮。\n\n真实上线时，把这里换成：\n" +
+          "- 注册 / 试用表单\n- Calendly 预约链接\n- 微信 / WhatsApp 客服\n- 支付跳转"
+        );
+      });
+    });
+
+    // 滚动进入动画
+    (function () {
+      var items = document.querySelectorAll(".reveal");
+      if (!("IntersectionObserver" in window)) {
+        items.forEach(function (el) { el.classList.add("is-in"); });
+        return;
+      }
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-in");
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+      );
+      items.forEach(function (el) { io.observe(el); });
+    })();
   </script>
 </body>
 </html>
