@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SparkAI 营销助手 - AI 驱动的营销内容平台</title>
+  <meta name="description" content="SparkAI 营销助手：用 AI 快速生成营销文案、分析受众、管理多渠道内容并追踪效果。" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121a33;
+      --text: #eef2ff;
+      --muted: #a8b3d6;
+      --primary: #6d5efc;
+      --primary-2: #22d3ee;
+      --border: rgba(255,255,255,.1);
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at 20% 0%, #1b2450 0, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1120px, 92%); margin: 0 auto; }
+    header {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(11,16,32,.78);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: .3px; }
+    .logo-mark {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      display: grid; place-items: center; color: #08101f; font-weight: 900;
+    }
+    .nav-links { display: flex; gap: 26px; color: var(--muted); font-size: 14px; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), #8b7bff);
+      box-shadow: 0 10px 30px rgba(109,94,252,.35);
+    }
+    .hero { padding: 86px 0 70px; }
+    .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 46px; align-items: center; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 12px; border: 1px solid var(--border); border-radius: 999px;
+      color: var(--muted); font-size: 13px; margin-bottom: 20px;
+      background: rgba(255,255,255,.03);
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; box-shadow: 0 0 12px #34d399; }
+    h1 { font-size: clamp(38px, 5.2vw, 64px); line-height: 1.08; letter-spacing: -1.5px; }
+    .gradient-text {
+      background: linear-gradient(90deg, #a99cff, #22d3ee 60%, #86efac);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p { margin: 22px 0 30px; color: var(--muted); font-size: 18px; max-width: 620px; }
+    .actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 14px 22px; border-radius: 12px; font-weight: 800; font-size: 15px;
+      border: 1px solid transparent; cursor: pointer; transition: .2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #8b7bff);
+      box-shadow: 0 16px 40px rgba(109,94,252,.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-ghost { border-color: var(--border); background: rgba(255,255,255,.03); color: var(--text); }
+    .btn-ghost:hover { background: rgba(255,255,255,.07); }
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border: 1px solid var(--border); border-radius: 22px; padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    .window-bar { display: flex; gap: 7px; margin-bottom: 18px; }
+    .window-bar span { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
+    .window-bar span:nth-child(2) { background: #febc2e; }
+    .window-bar span:nth-child(3) { background: #28c840; }
+    .chat { display: grid; gap: 12px; }
+    .msg { padding: 13px 15px; border-radius: 14px; font-size: 14px; }
+    .msg.user { background: rgba(34,211,238,.12); border: 1px solid rgba(34,211,238,.25); margin-left: 26px; }
+    .msg.ai { background: rgba(109,94,252,.14); border: 1px solid rgba(109,94,252,.3); margin-right: 26px; }
+    .msg small { display: block; color: var(--muted); margin-bottom: 4px; font-size: 12px; }
+    section { padding: 76px 0; }
+    .section-head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
+    .section-head h2 { font-size: clamp(28px, 3.4vw, 42px); letter-spacing: -1px; }
+    .section-head p { color: var(--muted); margin-top: 12px; }
+    .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .feature {
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
+      border: 1px solid var(--border); border-radius: 18px; padding: 24px;
+      transition: .2s ease;
+    }
+    .feature:hover { transform: translateY(-4px); border-color: rgba(109,94,252,.45); }
+    .icon {
+      width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+      background: rgba(109,94,252,.18); border: 1px solid rgba(109,94,252,.35);
+      font-size: 22px; margin-bottom: 16px;
+    }
+    .feature h3 { font-size: 17px; margin-bottom: 8px; }
+    .feature p { color: var(--muted); font-size: 14px; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .step { padding: 26px; border: 1px solid var(--border); border-radius: 18px; background: rgba(255,255,255,.035); }
+    .step-num { color: var(--primary-2); font-weight: 900; font-size: 13px; letter-spacing: 1px; }
+    .step h3 { margin: 10px 0 8px; }
+    .step p { color: var(--muted); font-size: 14px; }
+    .cta-box {
+      text-align: center; padding: 52px 24px; border-radius: 24px;
+      border: 1px solid rgba(109,94,252,.45);
+      background: radial-gradient(circle at 50% 0%, rgba(109,94,252,.28), rgba(255,255,255,.03) 60%);
+    }
+    .cta-box h2 { font-size: clamp(28px, 3.6vw, 44px); }
+    .cta-box p { color: var(--muted); margin: 14px auto 26px; max-width: 560px; }
+    footer { border-top: 1px solid var(--border); padding: 28px 0; color: var(--muted); font-size: 14px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .features { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 560px) {
+      .features { grid-template-columns: 1fr; }
+      .hero { padding-top: 56px; }
+      .actions .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="logo" href="#top">
+        <span class="logo-mark">S</span>
+        <span>SparkAI 营销助手</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">功能</a>
+        <a href="#how">使用方式</a>
+        <a href="#cta">免费试用</a>
+      </nav>
+      <a class="nav-cta" href="#cta">免费试用</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="badge"><span class="dot"></span> AI 营销工具 · 测试落地页</div>
+          <h1>让营销内容从想法到发布，<span class="gradient-text">只需几分钟</span></h1>
+          <p>SparkAI 营销助手帮助团队用 AI 生成文案、分析受众、规划多渠道内容，并追踪营销效果。当前页面用于测试 GitHub Pages 部署。</p>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="demoAction('免费试用')">免费试用</button>
+            <a class="btn btn-ghost" href="#features">查看功能</a>
+          </div>
+        </div>
+        <div class="hero-card" aria-label="产品演示卡片">
+          <div class="window-bar"><span></span><span></span><span></span></div>
+          <div class="chat">
+            <div class="msg user"><small>你</small>帮我写一条新品发布的社交媒体文案。</div>
+            <div class="msg ai"><small>SparkAI</small>当然可以。这里是一条突出“效率提升”和“限时体验”的文案：<br><br>“新品上线！用 SparkAI 把营销灵感变成可发布内容，只需几分钟。现在体验，解锁 AI 营销工作流。”</div>
+            <div class="msg user"><small>你</small>再给我三个不同风格的标题。</div>
+            <div class="msg ai"><small>SparkAI</small>1. 营销提速，从一条文案开始<br>2. 让 AI 成为你的营销搭档<br>3. 从灵感到发布，快人一步</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="section-head">
+          <h2>为营销团队准备的 AI 工作台</h2>
+          <p>从内容生成到效果追踪，把重复工作交给 AI，把时间留给策略。</p>
+        </div>
+        <div class="features">
+          <article class="feature">
+            <div class="icon">✍️</div>
+            <h3>AI 文案生成</h3>
+            <p>快速生成社交媒体、广告、邮件和落地页文案，支持多种语气与风格。</p>
+          </article>
+          <article class="feature">
+            <div class="icon">🎯</div>
+            <h3>受众洞察</h3>
+            <p>基于目标人群生成内容建议，帮助团队更精准地表达卖点。</p>
+          </article>
+          <article class="feature">
+            <div class="icon">🧩</div>
+            <h3>多渠道内容规划</h3>
+            <p>统一管理不同渠道的内容草稿，减少重复编辑和沟通成本。</p>
+          </article>
+          <article class="feature">
+            <div class="icon">📈</div>
+            <h3>效果追踪</h3>
+            <p>查看内容表现与活动反馈，持续优化下一次营销动作。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="container">
+        <div class="section-head">
+          <h2>三步开始使用</h2>
+          <p>这是一个纯前端示例页面，部署后可直接访问，按钮为演示交互。</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">STEP 01</div>
+            <h3>创建营销项目</h3>
+            <p>填写产品信息、目标受众和渠道，建立本次营销任务。</p>
+          </div>
+          <div class="step">
+            <div class="step-num">STEP 02</div>
+            <h3>生成与调整内容</h3>
+            <p>让 AI 生成初稿，再根据品牌语气进行修改和确认。</p>
+          </div>
+          <div class="step">
+            <div class="step-num">STEP 03</div>
+            <h3>发布并追踪效果</h3>
+            <p>复制内容到目标渠道发布，后续接入真实数据看板。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta">
+      <div class="container">
+        <div class="cta-box">
+          <h2>准备好测试你的 AI 营销落地页了吗？</h2>
+          <p>当前页面已适配 GitHub Pages。部署成功后，你会通过默认地址直接看到这个页面。</p>
+          <button class="btn btn-primary" onclick="demoAction('立即体验')">立即体验</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>© 2026 SparkAI 营销助手 · 测试落地页</div>
+      <div>由 GitHub Pages 托管 · 纯静态示例</div>
+    </div>
+  </footer>
+
+  <script>
+    function demoAction(name) {
+      alert(name + "：这是演示按钮。部署成功后，你可以把这里替换成真实表单、下载链接或产品试用地址。");
+    }
+  </script>
+</body>
+</html>
