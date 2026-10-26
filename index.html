@@ -3,257 +3,483 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SparkAI 营销助手 - AI 驱动的营销内容平台</title>
-  <meta name="description" content="SparkAI 营销助手：用 AI 快速生成营销文案、分析受众、管理多渠道内容并追踪效果。" />
+  <title>SparkAI — 少写 90% 的废话，多拿 10 倍的线索</title>
+  <meta name="description" content="SparkAI 帮营销团队 10 分钟产出过去要 4 小时的内容。14 天免费，不满意一键退款，不问原因。" />
   <style>
     :root {
-      --bg: #0b1020;
-      --card: #121a33;
-      --text: #eef2ff;
-      --muted: #a8b3d6;
-      --primary: #6d5efc;
-      --primary-2: #22d3ee;
-      --border: rgba(255,255,255,.1);
-      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --black: #0a0a0a;
+      --card: #141414;
+      --white: #fafafa;
+      --red: #e63946;
+      --red-hover: #c92d3a;
+      --yellow: #ffd60a;
+      --gray: #8a8a8a;
+      --border: #2a2a2a;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: radial-gradient(circle at 20% 0%, #1b2450 0, var(--bg) 45%);
-      color: var(--text);
-      line-height: 1.6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
     a { color: inherit; text-decoration: none; }
-    .container { width: min(1120px, 92%); margin: 0 auto; }
+    .container { width: min(1180px, 92%); margin: 0 auto; }
+    mark {
+      background: var(--yellow);
+      color: var(--black);
+      padding: 0 .12em;
+      font-weight: 900;
+    }
+
+    /* NAV */
     header {
-      position: sticky; top: 0; z-index: 10;
-      background: rgba(11,16,32,.78);
-      backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(10,10,10,.92);
+      backdrop-filter: blur(10px);
     }
-    .nav {
-      display: flex; align-items: center; justify-content: space-between;
-      height: 68px;
-    }
-    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: .3px; }
-    .logo-mark {
-      width: 34px; height: 34px; border-radius: 10px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      display: grid; place-items: center; color: #08101f; font-weight: 900;
-    }
-    .nav-links { display: flex; gap: 26px; color: var(--muted); font-size: 14px; }
-    .nav-links a:hover { color: var(--text); }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-weight: 900; font-size: 18px; letter-spacing: -.02em; }
+    .logo span { color: var(--red); }
     .nav-cta {
-      padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 700;
-      background: linear-gradient(135deg, var(--primary), #8b7bff);
-      box-shadow: 0 10px 30px rgba(109,94,252,.35);
+      background: var(--red); color: #fff; font-weight: 800;
+      padding: 10px 16px; border-radius: 4px; font-size: 14px;
+      transition: background .15s;
     }
-    .hero { padding: 86px 0 70px; }
-    .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 46px; align-items: center; }
-    .badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 7px 12px; border: 1px solid var(--border); border-radius: 999px;
-      color: var(--muted); font-size: 13px; margin-bottom: 20px;
-      background: rgba(255,255,255,.03);
+    .nav-cta:hover { background: var(--red-hover); }
+
+    /* HERO */
+    .hero { padding: 90px 0 70px; border-bottom: 1px solid var(--border); }
+    .kicker {
+      display: inline-block; font-size: 13px; font-weight: 800;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--red); border: 1px solid var(--red);
+      padding: 6px 10px; border-radius: 4px; margin-bottom: 28px;
     }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; box-shadow: 0 0 12px #34d399; }
-    h1 { font-size: clamp(38px, 5.2vw, 64px); line-height: 1.08; letter-spacing: -1.5px; }
-    .gradient-text {
-      background: linear-gradient(90deg, #a99cff, #22d3ee 60%, #86efac);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
+    h1 {
+      font-size: clamp(46px, 8.5vw, 108px);
+      font-weight: 900;
+      letter-spacing: -.045em;
+      line-height: .95;
+      margin-bottom: 28px;
     }
-    .hero p { margin: 22px 0 30px; color: var(--muted); font-size: 18px; max-width: 620px; }
-    .actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-sub {
+      font-size: clamp(18px, 2vw, 22px);
+      color: #cfcfcf;
+      max-width: 780px;
+      margin-bottom: 36px;
+    }
+    .hero-sub strong { color: var(--white); }
+    .actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
-      padding: 14px 22px; border-radius: 12px; font-weight: 800; font-size: 15px;
-      border: 1px solid transparent; cursor: pointer; transition: .2s ease;
+      padding: 18px 30px; border-radius: 4px;
+      font-weight: 900; font-size: 17px; letter-spacing: -.01em;
+      border: none; cursor: pointer; transition: .15s ease;
     }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #8b7bff);
-      box-shadow: 0 16px 40px rgba(109,94,252,.35);
+    .btn-primary { background: var(--red); color: #fff; }
+    .btn-primary:hover { background: var(--red-hover); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent; color: var(--white);
+      border: 2px solid var(--white);
     }
-    .btn-primary:hover { transform: translateY(-2px); }
-    .btn-ghost { border-color: var(--border); background: rgba(255,255,255,.03); color: var(--text); }
-    .btn-ghost:hover { background: rgba(255,255,255,.07); }
-    .hero-card {
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-      border: 1px solid var(--border); border-radius: 22px; padding: 22px;
-      box-shadow: var(--shadow);
+    .btn-ghost:hover { background: var(--white); color: var(--black); }
+    .microcopy { margin-top: 16px; color: var(--gray); font-size: 14px; font-weight: 600; }
+
+    /* STATS BAR */
+    .stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid var(--border);
     }
-    .window-bar { display: flex; gap: 7px; margin-bottom: 18px; }
-    .window-bar span { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
-    .window-bar span:nth-child(2) { background: #febc2e; }
-    .window-bar span:nth-child(3) { background: #28c840; }
-    .chat { display: grid; gap: 12px; }
-    .msg { padding: 13px 15px; border-radius: 14px; font-size: 14px; }
-    .msg.user { background: rgba(34,211,238,.12); border: 1px solid rgba(34,211,238,.25); margin-left: 26px; }
-    .msg.ai { background: rgba(109,94,252,.14); border: 1px solid rgba(109,94,252,.3); margin-right: 26px; }
-    .msg small { display: block; color: var(--muted); margin-bottom: 4px; font-size: 12px; }
-    section { padding: 76px 0; }
-    .section-head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
-    .section-head h2 { font-size: clamp(28px, 3.4vw, 42px); letter-spacing: -1px; }
-    .section-head p { color: var(--muted); margin-top: 12px; }
-    .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-    .feature {
-      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
-      border: 1px solid var(--border); border-radius: 18px; padding: 24px;
-      transition: .2s ease;
+    .stat {
+      padding: 36px 24px;
+      border-right: 1px solid var(--border);
+      text-align: center;
     }
-    .feature:hover { transform: translateY(-4px); border-color: rgba(109,94,252,.45); }
-    .icon {
-      width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
-      background: rgba(109,94,252,.18); border: 1px solid rgba(109,94,252,.35);
-      font-size: 22px; margin-bottom: 16px;
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-size: clamp(34px, 4.5vw, 56px);
+      font-weight: 900; letter-spacing: -.04em;
+      color: var(--yellow);
+      line-height: 1;
     }
-    .feature h3 { font-size: 17px; margin-bottom: 8px; }
-    .feature p { color: var(--muted); font-size: 14px; }
-    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .step { padding: 26px; border: 1px solid var(--border); border-radius: 18px; background: rgba(255,255,255,.035); }
-    .step-num { color: var(--primary-2); font-weight: 900; font-size: 13px; letter-spacing: 1px; }
-    .step h3 { margin: 10px 0 8px; }
-    .step p { color: var(--muted); font-size: 14px; }
-    .cta-box {
-      text-align: center; padding: 52px 24px; border-radius: 24px;
-      border: 1px solid rgba(109,94,252,.45);
-      background: radial-gradient(circle at 50% 0%, rgba(109,94,252,.28), rgba(255,255,255,.03) 60%);
+    .stat-label { margin-top: 10px; color: var(--gray); font-size: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+
+    /* SECTIONS */
+    section { padding: 90px 0; border-bottom: 1px solid var(--border); }
+    .section-label {
+      font-size: 13px; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 20px;
     }
-    .cta-box h2 { font-size: clamp(28px, 3.6vw, 44px); }
-    .cta-box p { color: var(--muted); margin: 14px auto 26px; max-width: 560px; }
-    footer { border-top: 1px solid var(--border); padding: 28px 0; color: var(--muted); font-size: 14px; }
-    .footer-inner { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    h2 {
+      font-size: clamp(34px, 5.5vw, 68px);
+      font-weight: 900; letter-spacing: -.035em; line-height: 1;
+      margin-bottom: 24px;
+    }
+    .lede { font-size: clamp(17px, 1.8vw, 21px); color: #c8c8c8; max-width: 820px; margin-bottom: 50px; }
+
+    /* PROBLEM LIST */
+    .problem-list { display: grid; gap: 18px; }
+    .problem {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 24px 26px;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--red);
+      background: var(--card);
+      border-radius: 4px;
+    }
+    .problem-x {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      display: grid; place-items: center;
+      background: var(--red); color: #fff;
+      font-weight: 900; font-size: 20px; border-radius: 4px;
+    }
+    .problem p { font-size: 18px; font-weight: 600; }
+    .problem p strong { color: var(--yellow); }
+
+    /* OFFER */
+    .offer-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 40px; align-items: start; }
+    .offer-list { display: grid; gap: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .offer-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 26px; gap: 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+    }
+    .offer-item:last-child { border-bottom: none; }
+    .offer-item h3 { font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
+    .offer-item p { font-size: 14px; color: var(--gray); margin-top: 4px; }
+    .offer-value { color: var(--yellow); font-weight: 900; white-space: nowrap; font-size: 16px; }
+
+    .price-card {
+      border: 2px solid var(--yellow);
+      background: var(--card);
+      padding: 34px 30px;
+      border-radius: 6px;
+      position: sticky; top: 90px;
+    }
+    .price-total-label { color: var(--gray); font-size: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .price-total {
+      font-size: 40px; font-weight: 900; letter-spacing: -.03em;
+      text-decoration: line-through; color: #666; margin: 6px 0 16px;
+    }
+    .price-now-label { color: var(--gray); font-size: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .price-now {
+      font-size: clamp(54px, 6vw, 76px);
+      font-weight: 900; letter-spacing: -.04em; color: var(--yellow); line-height: 1;
+    }
+    .price-now small { font-size: 20px; color: var(--white); font-weight: 700; }
+    .price-card .btn { width: 100%; margin-top: 22px; }
+    .price-note { margin-top: 14px; color: var(--gray); font-size: 13px; font-weight: 600; }
+
+    /* GUARANTEE */
+    .guarantee {
+      background: var(--yellow); color: var(--black);
+      border-radius: 6px; padding: 50px 44px;
+      display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center;
+    }
+    .guarantee-badge {
+      width: 110px; height: 110px; border-radius: 50%;
+      border: 4px solid var(--black);
+      display: grid; place-items: center;
+      font-weight: 900; font-size: 30px; line-height: 1; text-align: center;
+      flex-shrink: 0;
+    }
+    .guarantee h2 { font-size: clamp(30px, 4vw, 48px); margin-bottom: 12px; }
+    .guarantee p { font-size: 18px; font-weight: 600; line-height: 1.55; }
+
+    /* COMPARE TABLE */
+    .compare {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+    }
+    .compare-col { padding: 0; }
+    .compare-col.them { background: #0f0f0f; border-right: 1px solid var(--border); }
+    .compare-head {
+      padding: 22px 26px; font-weight: 900; font-size: 14px;
+      letter-spacing: .1em; text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-col.them .compare-head { color: var(--gray); }
+    .compare-col.us .compare-head { color: var(--black); background: var(--yellow); }
+    .compare-item {
+      padding: 20px 26px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 14px; align-items: flex-start;
+      font-size: 16px; font-weight: 600;
+    }
+    .compare-item:last-child { border-bottom: none; }
+    .compare-icon { font-weight: 900; flex-shrink: 0; }
+    .compare-col.them .compare-icon { color: var(--red); }
+    .compare-col.us .compare-icon { color: var(--yellow); }
+
+    /* FAQ */
+    .faq { display: grid; gap: 0; border-top: 1px solid var(--border); }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 26px 0;
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 30px;
+    }
+    .faq-q { font-size: 20px; font-weight: 900; letter-spacing: -.01em; }
+    .faq-a { color: #c8c8c8; font-size: 16px; }
+    .faq-a strong { color: var(--yellow); }
+
+    /* FINAL CTA */
+    .final-cta { text-align: left; padding: 100px 0; }
+    .final-cta h2 {
+      font-size: clamp(40px, 7vw, 88px);
+      margin-bottom: 24px;
+    }
+
+    footer {
+      padding: 34px 0;
+      color: var(--gray); font-size: 14px; font-weight: 600;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+      border-top: 1px solid var(--border);
+    }
+
     @media (max-width: 900px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .features { grid-template-columns: repeat(2, 1fr); }
-      .steps { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
+      .offer-grid { grid-template-columns: 1fr; }
+      .price-card { position: static; }
+      .compare { grid-template-columns: 1fr; }
+      .compare-col.them { border-right: none; border-bottom: 1px solid var(--border); }
+      .faq-item { grid-template-columns: 1fr; gap: 10px; }
+      .stats { grid-template-columns: 1fr; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat:last-child { border-bottom: none; }
+      .guarantee { grid-template-columns: 1fr; text-align: center; justify-items: center; padding: 40px 28px; }
     }
     @media (max-width: 560px) {
-      .features { grid-template-columns: 1fr; }
-      .hero { padding-top: 56px; }
       .actions .btn { width: 100%; }
+      .hero { padding-top: 60px; }
     }
   </style>
 </head>
 <body>
   <header>
     <div class="container nav">
-      <a class="logo" href="#top">
-        <span class="logo-mark">S</span>
-        <span>SparkAI 营销助手</span>
-      </a>
-      <nav class="nav-links">
-        <a href="#features">功能</a>
-        <a href="#how">使用方式</a>
-        <a href="#cta">免费试用</a>
-      </nav>
-      <a class="nav-cta" href="#cta">免费试用</a>
+      <div class="logo">SPARK<span>AI</span></div>
+      <a href="#offer" class="nav-cta">免费试 14 天</a>
     </div>
   </header>
 
-  <main id="top">
+  <main>
+    <!-- HERO -->
     <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <div class="badge"><span class="dot"></span> AI 营销工具 · 测试落地页</div>
-          <h1>让营销内容从想法到发布，<span class="gradient-text">只需几分钟</span></h1>
-          <p>SparkAI 营销助手帮助团队用 AI 生成文案、分析受众、规划多渠道内容，并追踪营销效果。当前页面用于测试 GitHub Pages 部署。</p>
-          <div class="actions">
-            <button class="btn btn-primary" onclick="demoAction('免费试用')">免费试用</button>
-            <a class="btn btn-ghost" href="#features">查看功能</a>
-          </div>
+      <div class="container">
+        <div class="kicker">给营销团队的 AI 内容系统 · 测试落地页</div>
+        <h1>少写 90% 的废话。<br>多拿 <mark>10 倍</mark> 的线索。</h1>
+        <p class="hero-sub">
+          SparkAI 让你的团队在 <strong>10 分钟</strong>内产出过去要 <strong>4 小时</strong>才能憋出来的营销内容。
+          没有花哨的 AI 术语，没有按月锁定的合同，只有你能直接复制、粘贴、发布的东西。
+        </p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="demoAction('免费试用')">免费试 14 天 →</button>
+          <a href="#problem" class="btn btn-ghost">先看问题在哪</a>
         </div>
-        <div class="hero-card" aria-label="产品演示卡片">
-          <div class="window-bar"><span></span><span></span><span></span></div>
-          <div class="chat">
-            <div class="msg user"><small>你</small>帮我写一条新品发布的社交媒体文案。</div>
-            <div class="msg ai"><small>SparkAI</small>当然可以。这里是一条突出“效率提升”和“限时体验”的文案：<br><br>“新品上线！用 SparkAI 把营销灵感变成可发布内容，只需几分钟。现在体验，解锁 AI 营销工作流。”</div>
-            <div class="msg user"><small>你</small>再给我三个不同风格的标题。</div>
-            <div class="msg ai"><small>SparkAI</small>1. 营销提速，从一条文案开始<br>2. 让 AI 成为你的营销搭档<br>3. 从灵感到发布，快人一步</div>
+        <p class="microcopy">不需要信用卡 · 不满意一键退款 · 不问原因</p>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">2,400,000+</div>
+        <div class="stat-label">条营销文案已生成</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3,200+</div>
+        <div class="stat-label">团队正在使用</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">11 小时</div>
+        <div class="stat-label">平均每周节省</div>
+      </div>
+    </div>
+
+    <!-- PROBLEM -->
+    <section id="problem">
+      <div class="container">
+        <div class="section-label">问题</div>
+        <h2>为什么大多数营销内容<br>根本没人看？</h2>
+        <p class="lede">不是你的产品不行。是你把时间花在了没人关心的地方。</p>
+        <div class="problem-list">
+          <div class="problem">
+            <div class="problem-x">✕</div>
+            <p>你在写<strong>你觉得酷</strong>的东西，不是客户<strong>想买</strong>的东西。</p>
+          </div>
+          <div class="problem">
+            <div class="problem-x">✕</div>
+            <p>你的团队花了 <strong>3 天</strong>，只憋出一条没人点的推文。</p>
+          </div>
+          <div class="problem">
+            <div class="problem-x">✕</div>
+            <p>你付给代理商 <strong>$5,000/月</strong>，换回来一堆没人读的报告和一句"品牌曝光"。</p>
+          </div>
+          <div class="problem">
+            <div class="problem-x">✕</div>
+            <p>你买了 7 个 AI 工具，每个都在教你<strong>怎么写 prompt</strong>，而不是帮你把活干完。</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="features">
+    <!-- OFFER -->
+    <section id="offer">
       <div class="container">
-        <div class="section-head">
-          <h2>为营销团队准备的 AI 工作台</h2>
-          <p>从内容生成到效果追踪，把重复工作交给 AI，把时间留给策略。</p>
-        </div>
-        <div class="features">
-          <article class="feature">
-            <div class="icon">✍️</div>
-            <h3>AI 文案生成</h3>
-            <p>快速生成社交媒体、广告、邮件和落地页文案，支持多种语气与风格。</p>
-          </article>
-          <article class="feature">
-            <div class="icon">🎯</div>
-            <h3>受众洞察</h3>
-            <p>基于目标人群生成内容建议，帮助团队更精准地表达卖点。</p>
-          </article>
-          <article class="feature">
-            <div class="icon">🧩</div>
-            <h3>多渠道内容规划</h3>
-            <p>统一管理不同渠道的内容草稿，减少重复编辑和沟通成本。</p>
-          </article>
-          <article class="feature">
-            <div class="icon">📈</div>
-            <h3>效果追踪</h3>
-            <p>查看内容表现与活动反馈，持续优化下一次营销动作。</p>
-          </article>
+        <div class="section-label">这就是你拿到的东西</div>
+        <h2>一个工具。一个价格。<br>全部功能。</h2>
+        <p class="lede">我们不做"基础版/专业版/企业版"那种让你加钱解锁的套路。你付一次，全部打开。</p>
+
+        <div class="offer-grid">
+          <div class="offer-list">
+            <div class="offer-item">
+              <div>
+                <h3>AI 文案引擎</h3>
+                <p>社交媒体、广告、邮件、落地页，一键生成，直接发布。</p>
+              </div>
+              <div class="offer-value">价值 $2,400/年</div>
+            </div>
+            <div class="offer-item">
+              <div>
+                <h3>20+ 营销模板</h3>
+                <p>经过验证的结构，填三个空，出成品。不用从零开始。</p>
+              </div>
+              <div class="offer-value">价值 $1,200/年</div>
+            </div>
+            <div class="offer-item">
+              <div>
+                <h3>受众洞察报告</h3>
+                <p>告诉你客户真正想听什么，而不是你以为他们想听什么。</p>
+              </div>
+              <div class="offer-value">价值 $3,600/年</div>
+            </div>
+            <div class="offer-item">
+              <div>
+                <h3>多渠道内容日历</h3>
+                <p>统一排期，不再靠群聊里"你发了吗"来推进工作。</p>
+              </div>
+              <div class="offer-value">价值 $960/年</div>
+            </div>
+            <div class="offer-item">
+              <div>
+                <h3>无限导出 &amp; 数据归你</h3>
+                <p>内容随时导出。我们不拿你的数据训练模型。</p>
+              </div>
+              <div class="offer-value">无价</div>
+            </div>
+          </div>
+
+          <div class="price-card">
+            <div class="price-total-label">如果分开买，总共</div>
+            <div class="price-total">$8,160 / 年</div>
+            <div class="price-now-label">你现在付</div>
+            <div class="price-now">$0<small> 起</small></div>
+            <button class="btn btn-primary" onclick="demoAction('立即开始')">免费试 14 天 →</button>
+            <p class="price-note">14 天后 $49/月，随时取消。不满意，发一封邮件，全额退款。</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="how">
+    <!-- GUARANTEE -->
+    <section>
       <div class="container">
-        <div class="section-head">
-          <h2>三步开始使用</h2>
-          <p>这是一个纯前端示例页面，部署后可直接访问，按钮为演示交互。</p>
-        </div>
-        <div class="steps">
-          <div class="step">
-            <div class="step-num">STEP 01</div>
-            <h3>创建营销项目</h3>
-            <p>填写产品信息、目标受众和渠道，建立本次营销任务。</p>
-          </div>
-          <div class="step">
-            <div class="step-num">STEP 02</div>
-            <h3>生成与调整内容</h3>
-            <p>让 AI 生成初稿，再根据品牌语气进行修改和确认。</p>
-          </div>
-          <div class="step">
-            <div class="step-num">STEP 03</div>
-            <h3>发布并追踪效果</h3>
-            <p>复制内容到目标渠道发布，后续接入真实数据看板。</p>
+        <div class="guarantee">
+          <div class="guarantee-badge">30<br>天</div>
+          <div>
+            <h2>不满意，全额退。不问原因。</h2>
+            <p>我们不靠合同留人。如果 SparkAI 不能帮你省时间、多拿线索，你就不该为它付钱。发一封邮件，钱退回去，就这么简单。</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="cta">
+    <!-- COMPARE -->
+    <section>
       <div class="container">
-        <div class="cta-box">
-          <h2>准备好测试你的 AI 营销落地页了吗？</h2>
-          <p>当前页面已适配 GitHub Pages。部署成功后，你会通过默认地址直接看到这个页面。</p>
-          <button class="btn btn-primary" onclick="demoAction('立即体验')">立即体验</button>
+        <div class="section-label">对比</div>
+        <h2>别人 vs. 我们</h2>
+        <p class="lede">你可以继续用原来的方式。也可以花 10 分钟试试这个。</p>
+        <div class="compare">
+          <div class="compare-col them">
+            <div class="compare-head">大多数 AI 工具 / 代理商</div>
+            <div class="compare-item"><span class="compare-icon">✕</span><span>按人头收费，团队越大越贵</span></div>
+            <div class="compare-item"><span class="compare-icon">✕</span><span>锁定 12 个月合同，提前解约罚钱</span></div>
+            <div class="compare-item"><span class="compare-icon">✕</span><span>写出来的东西还要你自己大改</span></div>
+            <div class="compare-item"><span class="compare-icon">✕</span><span>用你的数据训练他们的模型</span></div>
+            <div class="compare-item"><span class="compare-icon">✕</span><span>退款要填 5 张表，等 3 周</span></div>
+          </div>
+          <div class="compare-col us">
+            <div class="compare-head">SparkAI</div>
+            <div class="compare-item"><span class="compare-icon">✓</span><span>一个价格，1 人或 50 人团队都一样</span></div>
+            <div class="compare-item"><span class="compare-icon">✓</span><span>月付，随时取消，没有违约金</span></div>
+            <div class="compare-item"><span class="compare-icon">✓</span><span>生成即用，改两个词就能发</span></div>
+            <div class="compare-item"><span class="compare-icon">✓</span><span>你的内容归你，不训练模型</span></div>
+            <div class="compare-item"><span class="compare-icon">✓</span><span>一封邮件，3 个工作日到账</span></div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section>
+      <div class="container">
+        <div class="section-label">常见问题</div>
+        <h2>你可能想问的。</h2>
+        <div class="faq">
+          <div class="faq-item">
+            <div class="faq-q">它真的免费吗？</div>
+            <div class="faq-a">14 天免费，全部功能打开。<strong>不需要信用卡。</strong>14 天后 $49/月，不满意随时取消，发邮件退款。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">我需要会写 prompt 吗？</div>
+            <div class="faq-a">不需要。填三个空：你的产品、你的客户、你要发在哪个渠道。点生成。<strong>没有 prompt 教程要你看。</strong></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">小团队用得起吗？</div>
+            <div class="faq-a">1 个人用和 50 个人用，价格一样。<strong>我们不做按人头收费的游戏。</strong></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">我的数据安全吗？</div>
+            <div class="faq-a">你的内容归你。我们不用你的数据训练模型。随时导出，随时删除。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">它和 ChatGPT 有什么区别？</div>
+            <div class="faq-a">ChatGPT 是通用助手，什么都能聊。SparkAI <strong>只干营销这一件事</strong>，而且干到能直接发布。你省掉的是"改 AI 写出来的东西"那 3 小时。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta">
+      <div class="container">
+        <div class="section-label">最后一句</div>
+        <h2>你只有两种选择。</h2>
+        <p class="lede">继续用 4 小时憋一条没人看的文案。或者，花 10 分钟试试 SparkAI，14 天免费，不满意一键退款。</p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="demoAction('免费试用')">免费试 14 天 →</button>
+          <a href="#offer" class="btn btn-ghost">再看看你得到什么</a>
+        </div>
+        <p class="microcopy">不需要信用卡 · 30 天退款保证 · 随时取消</p>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="container footer-inner">
-      <div>© 2026 SparkAI 营销助手 · 测试落地页</div>
-      <div>由 GitHub Pages 托管 · 纯静态示例</div>
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+      <div>© 2026 SparkAI · 测试落地页 · Hormozi 风格</div>
+      <div>GitHub Pages 托管 · 纯静态演示</div>
     </div>
   </footer>
 
   <script>
     function demoAction(name) {
-      alert(name + "：这是演示按钮。部署成功后，你可以把这里替换成真实表单、下载链接或产品试用地址。");
+      alert(name + "：这是演示按钮。\n\n真实上线时，把这里换成：\n- 注册/试用表单\n- Calendly 预约链接\n- 微信/WhatsApp 客服\n- 支付跳转");
     }
   </script>
 </body>
